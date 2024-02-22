@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 	/* List of 70xx HFC PIDs possible */
 	unsigned int PRODUCT_ID[6] = {0x7040, 0x704A, 0x704B, 0x704C, 0x704E, 0x704F};
 	/////////////////////////////////////////////////////////////////////////////
-
+#if 0
 	printf("This demo will show off the Flexconnect command.\n");
 
 	printf("Setup the Flexconnect Command....\n");
@@ -382,7 +382,7 @@ int main(int argc, char **argv)
 			while(getchar()!='\n');
 			goto TIMEOUT;
 	}
-
+#endif
 	/* The Control Xfer is Configured and Initiated Below
 	* Only the wValue parameter should be modified, all others should remain the same.
 	*
@@ -456,7 +456,7 @@ int main(int argc, char **argv)
 		if (!libusb_detach_kernel_driver(session.dev_handle, 0))
 			printf("Kernel Driver Detached!\n");
 	}
-
+#if 0
 	/* claim interface 0 (the first) of device (mine had jsut 1) */
 	printf("Claiming interface 0...");
 	r = libusb_claim_interface(session.dev_handle, 0);
@@ -467,7 +467,7 @@ int main(int argc, char **argv)
 		return -EIO;
 	}
 	printf("ok\n");
-
+#endif
 	int len;
 	int transferred;
 	uint8_t bmRequestType = 0x41;		/* Always 0x41					*/
@@ -476,7 +476,7 @@ int main(int argc, char **argv)
 	uint16_t wIndex = 0x0000;		/* Always 0x0000				*/
 	unsigned char *data = 0;		/* Always zero data length control xfer		*/
 	uint16_t wLength = 0x0000;		/* Always 0x0000				*/
-	unsigned int timeout_ = 50000000;
+	unsigned int timeout_ = 1000;
 #if 0
 	/* Send Flexconnect control transfer */
 	r = libusb_control_transfer(session.dev_handle,

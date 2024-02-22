@@ -518,7 +518,7 @@ int main(int argc, char **argv)
 	uint16_t wValue = 0x090B;  // last 4 bytes // OUTPUT ENABLE addr
 	wIndex = 0xBF80;  // first 4 bytes
 	wLength = 0x0001;
-	uint8_t data_out=0x20; // bit 5
+	uint8_t data_out=0xFF; // bit 5
 	libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
 				    bRequest,
@@ -534,8 +534,8 @@ int main(int argc, char **argv)
 	wValue = 0x092B;  // last 4 bytes
 	wIndex = 0xBF80;  // first 4 bytes
 	wLength = 0x0001;
-	data_out=0x20; // set
-	for (int i = 0; i < 10;i++) {
+	data_out=0xFF; // set
+	for (int i = 0; i < 20;i++) {
 		libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
 				    bRequest,

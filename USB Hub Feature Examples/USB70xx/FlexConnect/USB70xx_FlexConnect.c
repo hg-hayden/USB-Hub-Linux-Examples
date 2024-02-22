@@ -127,7 +127,8 @@ int main(int argc, char **argv)
 		case 1:
 			printf("Timeout of 10ms selected\n");
 			printf("Which port will the command be sent to?\n");
-			scanf("%s", port_select);
+			// scanf("%s", port_select);
+			port_select = 1;
 			if (strcmp(port_select, "1") == 0)
 			{
 				printf("Port 1 selected\n");
@@ -522,7 +523,7 @@ int main(int argc, char **argv)
 	libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
 				    bRequest,
-				    session.wValue,
+				    wValue,
 				    wIndex,
 				    &data_out,
 				    wLength,
@@ -536,10 +537,11 @@ int main(int argc, char **argv)
 	wLength = 0x0001;
 	data_out=0xFF; // set
 	for (int i = 0; i < 20;i++) {
+		printf("%d\n", i);
 		libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
 				    bRequest,
-				    session.wValue,
+				    wValue,
 				    wIndex,
 				    &data_out,
 				    wLength,

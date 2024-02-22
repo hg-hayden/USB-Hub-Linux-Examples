@@ -1,7 +1,7 @@
 #Simple makefile for libusb application
 
 CC=gcc
-INC=/usr/local/include/libusb-1.0/
+INC=/usr/include/libusb-1.0/
 OBJ=USB70xx_FlexConnect.o
 
 USB70xx_FlexConnect: $(OBJ)

@@ -29,7 +29,7 @@ Author: Connor Chilton <connor.chilton@microchip.com>
 #include <libusb.h>
 #include <semaphore.h>
 #include <errno.h>
-
+#include <unistd.h>
 /* the buffer sizes can exceed the USB MTU */
 #define MAX_CTL_XFER	64
 #define MAX_BULK_XFER	512
@@ -85,7 +85,8 @@ int main(int argc, char **argv)
 	printf("If smartphone does not enumerate NCM device within 'X' time, the hub will revert to deault.\n");
 	TIMEOUT:
 	printf("0-No Timeout\n1-10ms\n2-100ms\n3-500ms\n4-1s\n5-5s\n6-10s\n7-20s\n");
-	scanf("%i", &timeout_time);
+	// scanf("%i", &timeout_time);
+	timeout_time = 1;
 	switch(timeout_time){
 		case 0:
 			printf("No timeout selected\n");
@@ -492,6 +493,59 @@ int main(int argc, char **argv)
 		printf("Flexconnect Control transfer failed. Error: %d\n", r);
 	}
 
+	/* example: write 1 byte to GPIO71 */
+	bmRequestType = 0x40;
+	bRequest = 0x03;
+	uint16_t wValue = 0x0928;  // last 4 bytes
+	wIndex = 0xBF80;  // first 4 bytes
+	wLength = 0x0001;
+	uint8_t data_out=0x80; // set
+	libusb_control_transfer(session.dev_handle,
+				    bmRequestType,
+				    bRequest,
+				    session.wValue,
+				    wIndex,
+				    &data_out,
+				    wLength,
+				    timeout_);
+	/* toogle PF29 (GPIO93) */
+
+	// set as OUTPUT ENABLE
+	bmRequestType = 0x40;
+	bRequest = 0x03;
+	wValue = 0x090B;  // last 4 bytes // OUTPUT ENABLE addr
+	wIndex = 0xBF80;  // first 4 bytes
+	wLength = 0x0001;
+	data_out=0x20; // bit 5
+	libusb_control_transfer(session.dev_handle,
+				    bmRequestType,
+				    bRequest,
+				    session.wValue,
+				    wIndex,
+				    &data_out,
+				    wLength,
+				    timeout_);
+
+	// write as HI
+	bmRequestType = 0x40;
+	bRequest = 0x03;
+	wValue = 0x092B;  // last 4 bytes
+	wIndex = 0xBF80;  // first 4 bytes
+	wLength = 0x0001;
+	data_out=0x20; // set
+	for (int i = 0; i < 10;i++) {
+		libusb_control_transfer(session.dev_handle,
+				    bmRequestType,
+				    bRequest,
+				    session.wValue,
+				    wIndex,
+				    &data_out,
+				    wLength,
+				    timeout_);
+		data_out = ~data_out;
+		sleep(2);
+	}
+	/* toggle PF31 (GPIO95) */
 
 	/* release interface */
 	printf("Releasing interface...");

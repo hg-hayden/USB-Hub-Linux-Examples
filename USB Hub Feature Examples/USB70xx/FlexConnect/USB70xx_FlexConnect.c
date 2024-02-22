@@ -476,7 +476,7 @@ int main(int argc, char **argv)
 	unsigned char *data = 0;		/* Always zero data length control xfer		*/
 	uint16_t wLength = 0x0000;		/* Always 0x0000				*/
 	unsigned int timeout_ = 50000000;
-
+#if 0
 	/* Send Flexconnect control transfer */
 	r = libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
@@ -492,8 +492,9 @@ int main(int argc, char **argv)
 	else{
 		printf("Flexconnect Control transfer failed. Error: %d\n", r);
 	}
-
+#endif
 	/* example: write 1 byte to GPIO71 */
+#if 0	
 	bmRequestType = 0x40;
 	bRequest = 0x03;
 	uint16_t wValue = 0x0928;  // last 4 bytes
@@ -508,15 +509,16 @@ int main(int argc, char **argv)
 				    &data_out,
 				    wLength,
 				    timeout_);
+#endif
 	/* toogle PF29 (GPIO93) */
 
 	// set as OUTPUT ENABLE
 	bmRequestType = 0x40;
 	bRequest = 0x03;
-	wValue = 0x090B;  // last 4 bytes // OUTPUT ENABLE addr
+	uint16_t wValue = 0x090B;  // last 4 bytes // OUTPUT ENABLE addr
 	wIndex = 0xBF80;  // first 4 bytes
 	wLength = 0x0001;
-	data_out=0x20; // bit 5
+	uint8_t data_out=0x20; // bit 5
 	libusb_control_transfer(session.dev_handle,
 				    bmRequestType,
 				    bRequest,

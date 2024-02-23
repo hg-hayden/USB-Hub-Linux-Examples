@@ -456,7 +456,7 @@ int main(int argc, char **argv)
 		if (!libusb_detach_kernel_driver(session.dev_handle, 0))
 			printf("Kernel Driver Detached!\n");
 	}
-#if 0
+#if 1
 	/* claim interface 0 (the first) of device (mine had jsut 1) */
 	printf("Claiming interface 0...");
 	r = libusb_claim_interface(session.dev_handle, 0);
